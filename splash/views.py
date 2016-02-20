@@ -11,6 +11,6 @@ from .forms import RegisterForm
 
 def index(request):
     registrationForm = RegisterForm();
-     return render(request, 'index.html', {'register': registrationForm})
+    return render(request, 'index.html', {'register': registrationForm})
     
     
