@@ -31,7 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'users.apps.UserConfig',
+    'users.apps.UsersConfig',
     'splash.apps.SplashConfig',
     'tasks.apps.TasksConfig',
     'django.contrib.admin',

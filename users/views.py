@@ -11,10 +11,10 @@ from django.contrib.auth import logout as auth_logout
 def register(request):
     if request.method == 'POST':
         form = RegisterForm(request.POST)
-        if form.is_valid
+        if form.is_valid():
             cleanData = form.cleaned_data
             if cleanData['password'] == data ['password_confirmation']:
-                user = User.objects.create_user(first_name=cleanData['name'], cleanData['email'], cleanData['password'])
+                user = User.objects.create_user(data['email'], '', data['password'], first_name=data['fl_name'])
                 user = authenticate(username=cleanData['email'], password=cleanData['password'])
                 auth_login(request,user)
                 return HttpResponseRedirect('/')
