@@ -14,6 +14,7 @@ from .forms import RegisterForm
 
 def index(request):
     registrationForm = RegisterForm();
-    return render(request, 'index.html', {'registration': registrationForm})
+    loginForm = LoginForm()
+    return render(request, 'splash/index.html', {'login': loginForm, 'register': registrationForm})
     
     
