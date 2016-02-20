@@ -1,5 +1,8 @@
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
+from .forms import RegisterForm
+from django.contrib.auth.models import User
+from django.db.models import Q
 # Changed it to HttpResponseRedirect
 
 # Create your views here.
@@ -11,6 +14,6 @@ from .forms import RegisterForm
 
 def index(request):
     registrationForm = RegisterForm();
-    return render(request, 'index.html', {'register': registrationForm})
+    return render(request, 'index.html', {'registration': registrationForm})
     
     

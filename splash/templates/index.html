@@ -17,82 +17,20 @@
     <img src="http://ordiate.com/wp-content/uploads/2013/04/stress.jpg" alt="Stress" style="width:304px;height:228px;">
 </div>
 
-{{#if errors}}
+{% if errors %}
 <div style="color:red" class="validation-error">
     {{errors}}
 </div>
-{{/if}}
+{% endif %}
 
-{{#if currentUser}}
-    <h3>Welcome, {{currentUser.name}}</h3>
-    <div>
-        <h4>Your Tasks</h4>
-
-        {{#if tasks}}
-            <ul>
-            {{#each tasks}}
-                <li class="tasks-list-item {{#if this.isComplete}} complete-task {{/if}}">
-                  <span class="task-title">{{this.title}}</span>
-                  {{#if this.taskowner}}
-                  <form method="get" action="/task/{{this.id}}/delete">
-                    <input type="submit" name="delete-task" class="delete-task" value="Delete">
-                  </form>
-                  {{/if}}
-                  {{#if this.isComplete}}
-                  <form method="get" action="/task/{{this.id}}/complete">
-                    <input type="submit" name="toggle-task" class="toggle-task" value="Mark incomplete">
-                  </form>
-                  {{else}}
-                  <form method="get" action="/task/{{this.id}}/complete">
-                    <input type="submit" name="toggle-task" class="toggle-task" value="Mark complete">
-                  </form>
-                  {{/if}}
-                </li>
-            {{/each}}
-            </ul>
-        {{else}}
-            No tasks to show!
-        {{/if}}
-    </div>
-    <hr>
-    <div>
-        <h4>Add a new task</h4>
-        <form action="/task/create" method="POST">
-            <label for="title">Task title</label>
-            <input name="title" type="text"><br>
-            <label for="description">Task Description</label>
-            <input name="description" type="text"><br>
-            Collaborators<br>
-            <input name="collaborator1" type="email"><br>
-            <input name="collaborator2" type="email"><br>
-            <input name="collaborator3" type="email"><br>
-            <input type="submit" class="create-task-submit">
-        </form>
-    </div>
-
-{{else}}
-<div>
-    <form class="login" action="/user/login" method="POST">
-        <label for="email">Email</label>
-        <input name="email" id="email" type="text"><br>
-        <label for="password">Password</label>
-        <input name="password"  id="password" type="text"><br>
-        <input type="submit"  class="log-in-submit">
-    </form>
+<div id="registration">
+  <form action="/user/registration" method="POST" class="registration">
+    {% csrf_token %}
+    <h2>create your account</h2>
+    {{registration}}
+    <button class="sign-up-submit" type="submit">registration</button>
 </div>
 
-<div><hr></div>
-
-<div>
-    <form class="register" action="/user/register" method="POST" class="signup-form" style="display: block;">
-      <input name="fl_name" type="text" class="text-input" placeholder="first &amp; last name">
-      <input name="email" type="email" class="text-input" placeholder="email">
-      <input name="password" type="password" class="text-input" placeholder="password">
-      <input name="password_confirmation" type="password" class="text-input" placeholder="password confirmation">
-      <input class="sign-up-submit" type="submit">
-    </form>
-</div>
-{{/if}}
     <footer>
         <a href="/user/logout" class="logout">Logout</a>
     </footer>
