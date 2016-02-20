@@ -1,12 +1,11 @@
 from django import forms
-
+        
 class RegisterForm(forms.Form):
-    #Keep in mind character length if tests are failing
-    name = forms.CharField(label='First & Last Name', max_length=30)
-    email = forms.CharField(label='E-mail', max_length=30)
-    password = forms.CharField(label='Password', max_length=30)
-    passwordConfirmation = forms.CharField(label='Password Confirmation', max_length=30)
-    f.cleaned_data
+
+    name = forms.CharField(max_length=50, label='Name', widget=forms.TextInput(attrs={'placeholder': 'first & last name'}))
+    email = forms.EmailField(max_length=50, label='E-mail', widget=forms.TextInput(attrs={'placeholder': 'email address'}))
+    password = forms.CharField(max_length=50, label='Password', widget=forms.PasswordInput(attrs={'placeholder': 'password'}))
+    passwordConfirmation = forms.CharField(max_length=50, label='Password Confirmation', widget=forms.PasswordInput(attrs={'placeholder': 'confirm password'}))
 
 # class LoginForm(forms.Form):
 #     email = 
