@@ -11,20 +11,40 @@ from django.contrib.auth import logout as auth_logout
 def register(request):
     if request.method == 'POST':
         form = RegisterForm(request.POST)
+        
         if form.is_valid():
             cleanData = form.cleaned_data
-            if cleanData['password'] == data ['password_confirmation']:
-                user = User.objects.create_user(data['email'], '', data['password'], first_name=data['fl_name'])
-                user = authenticate(username=cleanData['email'], password=cleanData['password'])
-                auth_login(request,user)
-                return HttpResponseRedirect('/')
+            
+            if len(cleanData['name']) > 50:
+                registrationForm = RegisterForm()
+                loginForm = LoginForm()
+                return render(request, 'splash/index.html', {'login': loginForm, 'register': registrationForm, 'errors': 'Name is too long'})
+            
+            if len(cleanData['password']) > 50:
+                registrationForm = RegisterForm()
+                loginForm = LoginForm()
+                return render(request, 'splash/index.html', {'login': loginForm, 'register': registrationForm, 'errors': 'Password is too long'})
+            
+            if cleanData['password'] == cleanData['password_confirmation']:
+                if User.objects.filter(username=cleanData['email']).exists():
+                    registrationForm = RegisterForm()
+                loginForm = LoginForm()
+                return render(request, 'splash/index.html', {'login': loginForm, 'register': registrationForm, 'errors': 'E-mail already exists'})
+                else:
+                    user = User.objects.create_user(data['email'], '', data['password'], first_name=data['name'])
+                    user = authenticate(username=cleanData['email'], password=cleanData['password'])
+                    auth_login(request,user)
+                    return HttpResponseRedirect('/')
             else:
-                return HttpResponse('Passwords do not match')
+                registrationForm = RegisterForm()
+                loginForm = LoginForm()
+                return render(request, 'splash/index.html', {'login': loginForm, 'register': registrationForm, 'errors': 'Passwords do not match'})
         else:
             registrationForm = RegisterForm()
-            return render(request, 'splash/index.html', {'register': registrationForm})
+            loginForm = LoginForm()
+            return render(request, 'splash/index.html', {'login': loginForm, 'register': registrationForm, 'errors': 'Name too short'})
     return HttpResponseRedirect('/')
-
+    
 def login(request):
     #not sure if use post or get here, think get making no changes to database
     email=request.GET['email]
@@ -46,9 +66,6 @@ def login(request):
         registrationForm = RegisterForm()
         loginForm = LoginForm()
         return render(request, 'splash/index.html', {'login': loginForm, 'register': registrationForm, 'errors': 'Invalid e-mail'})
-
-
-
 
 def logout(request):
     auth_logout(request)
