@@ -1,4 +1,25 @@
-Ain't nobody fuckin with my mother fucking click
-click
-click
-click
+<!DOCTYPE html>
+
+<html>
+<head>
+<title>Login Page</title>
+</head>
+
+<body>
+<h1>Herb's Corner</h1>
+
+<h2>CPSC113 Social ToDo App</h2>
+
+<div>
+    <h5>Don't feel like this!</h5>
+    <img src="http://ordiate.com/wp-content/uploads/2013/04/stress.jpg" alt="Stress" style="width:304px;height:228px;">
+</div>
+
+<form action="/your-name/" method="post">
+    {% csrf_token %}
+    {{ form }}
+    <input type="submit" value="Submit" />
+</form>
+</body>
+
+</html>
