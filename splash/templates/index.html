@@ -31,7 +31,7 @@
         {% if tasks %}
             <ul>
             {% for task in tasks %}
-                <li class="tasks-list-item {% if this.isComplete %} complete-task {{/if}}">
+                <li class="tasks-list-item {% if this.isComplete %} complete-task {% endif %}">
                   <span class="task-title">{{this.title}}</span>
                   {% if this.taskowner %}
                   <form method="get" action="/task/{{this.id}}/delete">
@@ -42,17 +42,17 @@
                   <form method="get" action="/task/{{this.id}}/complete">
                     <input type="submit" name="toggle-task" class="toggle-task" value="Mark incomplete">
                   </form>
-                  {{else}}
+                  {% else %}
                   <form method="get" action="/task/{{this.id}}/complete">
                     <input type="submit" name="toggle-task" class="toggle-task" value="Mark complete">
                   </form>
-                  {{/if}}
+                  {% endif %}
                 </li>
-            {{/each}}
+            {% endfor %}
             </ul>
-        {{else}}
+        {% else %}
             No tasks to show!
-        {{/if}}
+        {% endif %}
     </div>
     <hr>
     <div>
@@ -70,7 +70,7 @@
         </form>
     </div>
 
-{{else}}
+{% else %}
 <div>
     <form class="login" action="/user/login" method="POST">
         <label for="email">Email</label>
@@ -83,7 +83,7 @@
 
 <div><hr></div>
 
-{{/if}}
+{% endif %}
 
 <div id="registration">
   <form action="/user/registration" method="POST" class="registration">
@@ -92,6 +92,8 @@
     {{registration}}
     <button class="sign-up-submit" type="submit">Submit</button>
 </div>
+
+<!--Add Tasks and Login Form-->
 
     <footer>
         <a href="/user/logout" class="logout">Logout</a>
