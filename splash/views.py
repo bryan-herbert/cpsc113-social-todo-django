@@ -20,6 +20,6 @@ def index(request):
         tasks = Task.objects.filter(Q(owner=request.user) | Q(collaborators=request.user))
         return render(request, 'splash/index.html', {'user': request.user, 'new_task': newTaskForm, 'tasks': tasks})
     else:
-    registrationForm = RegisterForm();
-    loginForm = LoginForm()
-    return render(request, 'splash/index.html', {'login': loginForm, 'register': registrationForm})
+        registrationForm = RegisterForm()
+        loginForm = LoginForm()
+        return render(request, 'splash/index.html', {'login': loginForm, 'register': registrationForm})

@@ -1,10 +1,10 @@
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
-from .forms import RegisterForm, LoginForm
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
 from django.contrib.auth import login as auth_login
 from django.contrib.auth import logout as auth_logout
+from .forms import RegisterForm, LoginForm
 
 # Create your views here.
 
@@ -26,10 +26,12 @@ def register(request):
                 return render(request, 'splash/index.html', {'login': loginForm, 'register': registrationForm, 'errors': 'Password is too long'})
             
             if cleanData['password'] == cleanData['password_confirmation']:
+                
                 if User.objects.filter(username=cleanData['email']).exists():
                     registrationForm = RegisterForm()
-                loginForm = LoginForm()
-                return render(request, 'splash/index.html', {'login': loginForm, 'register': registrationForm, 'errors': 'E-mail already exists'})
+                    loginForm = LoginForm()
+                    return render(request, 'splash/index.html', {'login': loginForm, 'register': registrationForm, 'errors': 'E-mail already exists'})
+                
                 else:
                     user = User.objects.create_user(data['email'], '', data['password'], first_name=data['name'])
                     user = authenticate(username=cleanData['email'], password=cleanData['password'])
@@ -47,7 +49,7 @@ def register(request):
     
 def login(request):
     #not sure if use post or get here, think get making no changes to database
-    email=request.GET['email]
+    email=request.GET['email']
     password=request.GET['password']
     if User.objects.filer(username=email).exists():
         user = authenticate(username=email, password=password)
