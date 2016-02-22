@@ -72,7 +72,7 @@
 
 {% else %}
 <div>
-    <form class="login" action="/user/login" method="POST">
+    <form class="login" action="/users/login" method="POST">
         <label for="email">Email</label>
         <input name="email" id="email" type="text"><br>
         <label for="password">Password</label>
@@ -86,17 +86,15 @@
 {% endif %}
 
 <div id="registration">
-  <form action="/user/registration" method="POST" class="registration">
+  <form action="/users/registration" method="POST" class="registration">
     {% csrf_token %}
     <h2>Register Below</h2>
     {{registration}}
     <button class="sign-up-submit" type="submit">Submit</button>
 </div>
 
-<!--Add Tasks and Login Form-->
-
     <footer>
-        <a href="/user/logout" class="logout">Logout</a>
+        <a href="/users/logout" class="logout">Logout</a>
     </footer>
 </body>
 

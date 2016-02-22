@@ -4,47 +4,41 @@ from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
 from django.contrib.auth import login as auth_login
 from django.contrib.auth import logout as auth_logout
-from .forms import RegisterForm, LoginForm
+from splash.forms import RegisterForm, LoginForm
 
 # Create your views here.
 
-def register(request):
+def registration(request):
     if request.method == 'POST':
         form = RegisterForm(request.POST)
-        
         if form.is_valid():
             cleanData = form.cleaned_data
-            
             if len(cleanData['name']) > 50:
                 registrationForm = RegisterForm()
                 loginForm = LoginForm()
-                return render(request, 'splash/index.html', {'login': loginForm, 'register': registrationForm, 'errors': 'Name is too long'})
-            
+                return render(request, 'splash/index.html', {'login': loginForm, 'registration': registrationForm, 'errors': 'Name is too long'})
             if len(cleanData['password']) > 50:
                 registrationForm = RegisterForm()
                 loginForm = LoginForm()
-                return render(request, 'splash/index.html', {'login': loginForm, 'register': registrationForm, 'errors': 'Password is too long'})
-            
-            if cleanData['password'] == cleanData['password_confirmation']:
-                
+                return render(request, 'splash/index.html', {'login': loginForm, 'registration': registrationForm, 'errors': 'Password is too long'})
+            if cleanData['password'] == cleanData['passwordConfirmation']:
                 if User.objects.filter(username=cleanData['email']).exists():
                     registrationForm = RegisterForm()
                     loginForm = LoginForm()
-                    return render(request, 'splash/index.html', {'login': loginForm, 'register': registrationForm, 'errors': 'E-mail already exists'})
-                
+                    return render(request, 'splash/index.html', {'login': loginForm, 'registration': registrationForm, 'errors': 'E-mail already exists'})
                 else:
-                    user = User.objects.create_user(data['email'], '', data['password'], first_name=data['name'])
+                    user = User.objects.create_user(cleanData['email'], '', cleanData['password'], first_name=cleanData['name'])
                     user = authenticate(username=cleanData['email'], password=cleanData['password'])
                     auth_login(request,user)
                     return HttpResponseRedirect('/')
             else:
                 registrationForm = RegisterForm()
                 loginForm = LoginForm()
-                return render(request, 'splash/index.html', {'login': loginForm, 'register': registrationForm, 'errors': 'Passwords do not match'})
+                return render(request, 'splash/index.html', {'login': loginForm, 'registration': registrationForm, 'errors': 'Passwords do not match'})
         else:
             registrationForm = RegisterForm()
             loginForm = LoginForm()
-            return render(request, 'splash/index.html', {'login': loginForm, 'register': registrationForm, 'errors': 'Name too short'})
+            return render(request, 'splash/index.html', {'login': loginForm, 'registration': registrationForm, 'errors': 'Name too short'})
     return HttpResponseRedirect('/')
     
 def login(request):
@@ -63,11 +57,11 @@ def login(request):
         else:
             registrationForm = RegisterForm()
             loginForm = LoginForm()
-            return render(request, 'splash/index.html', {'login': loginForm, 'register': registrationForm, 'errors': 'Invalid password'})
+            return render(request, 'splash/index.html', {'login': loginForm, 'registration': registrationForm, 'errors': 'Invalid password'})
     else:
         registrationForm = RegisterForm()
         loginForm = LoginForm()
-        return render(request, 'splash/index.html', {'login': loginForm, 'register': registrationForm, 'errors': 'Invalid e-mail'})
+        return render(request, 'splash/index.html', {'login': loginForm, 'registration': registrationForm, 'errors': 'Invalid e-mail'})
 
 def logout(request):
     auth_logout(request)
