@@ -24,40 +24,48 @@
 {% endif %}
 
 {% if user.is_authenticated %}
-    <h3>Welcome, {request.user.first_name}</h3>
+    <h3>Welcome, {{request.user.first_name}}</h3>
     <div>
         <h4>Your Tasks</h4>
 
+        <div>
         {% if tasks %}
-            <ul>
-            {% for task in tasks %}
-                <li class="tasks-list-item {% if this.isComplete %} complete-task {% endif %}">
-                  <span class="task-title">{{this.title}}</span>
-                  {% if this.taskowner %}
-                  <form method="get" action="/task/{{this.id}}/delete">
-                    <input type="submit" name="delete-task" class="delete-task" value="Delete">
-                  </form>
-                  {% endif %}
-                  {% if this.isComplete %}
-                  <form method="get" action="/task/{{this.id}}/complete">
-                    <input type="submit" name="toggle-task" class="toggle-task" value="Mark incomplete">
-                  </form>
-                  {% else %}
-                  <form method="get" action="/task/{{this.id}}/complete">
-                    <input type="submit" name="toggle-task" class="toggle-task" value="Mark complete">
-                  </form>
-                  {% endif %}
-                </li>
-            {% endfor %}
-            </ul>
+          {% for task in tasks %}
+            {% if task.isComplete %}
+              <div class="tasks-list-item complete-task">
+              <h2><span class="task-title"><s>{{task.title}}</s></span></h2>
+              <h3><span class="task-description"><s><i>{{task.description}}</i></s></span></h3>
+              <form action='/tasks/toggle/{{task.id}}' method="POST">
+                {% csrf_token %}
+                <button type="submit" name="toggle-task" class="toggle-task">Mark Incomplete</button>
+              </form>
+            {% else %}
+              <div class="tasks-list-item">
+              <h2><span class="task-title">{{task.title}}</span></h2>
+              <h3><span class="task-description"><i>{{task.description}}</i></span></h3>
+              <form action='/tasks/toggle/{{task.id}}' method="POST">
+                {% csrf_token %}
+                <button type="submit" name="toggle-task" class="toggle-task">Mark Complete</button>
+              </form>
+            {% endif %}
+            {% if task.owner == user %}
+              <form action='/tasks/delete/{{task.id}}' method="POST">
+                {% csrf_token %}
+                <button type="submit" name="delete-task" class="delete-task">Delete</button>
+              </form>
+            {% endif %}
+              </div>
+          {% endfor %}
         {% else %}
-            No tasks to show!
+          <h2>no tasks to show</h2>
         {% endif %}
-    </div>
+      </div>
     <hr>
+    
     <div>
         <h4>Add a new task</h4>
-        <form action="/task/create" method="POST">
+        <form action="/tasks/create" method="POST">
+            {% csrf_token %}
             <label for="title">Task title</label>
             <input name="title" type="text"><br>
             <label for="description">Task Description</label>
@@ -73,6 +81,7 @@
 {% else %}
 <div>
     <form class="login" action="/users/login" method="POST">
+            {% csrf_token %}
         <label for="email">Email</label>
         <input name="email" id="email" type="text"><br>
         <label for="password">Password</label>
@@ -84,6 +93,7 @@
 <div><hr></div>
 
 {% endif %}
+{% if not user.is_authenticated %}
 
 <div id="registration">
   <form action="/users/registration" method="POST" class="registration">
@@ -92,6 +102,7 @@
     {{registration}}
     <button class="sign-up-submit" type="submit">Submit</button>
 </div>
+{% endif %}
 
     <footer>
         <a href="/users/logout" class="logout">Logout</a>

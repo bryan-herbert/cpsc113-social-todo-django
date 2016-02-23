@@ -11,8 +11,15 @@ class RegisterForm(forms.Form):
     passwordConfirmation = forms.CharField(max_length=50, label='Password Confirmation', widget=forms.PasswordInput(attrs={'placeholder': 'confirm password'}))
     
 class newTaskForm(forms.Form):
-    taskTitle = forms.CharField(max_length=500, label='Task Info', widget=forms.TextInput(attrs={'placeholder': 'Task Title'}))
-    taskDescription = forms.CharField(max_length=5000, label='Task Description', widget=forms.TextInput(attrs={'placeholder': 'description'}))
-    collaborator1 = forms.CharField(max_length=100, required=False, label='collaborators', widget=forms.TextInput(attrs={'placeholder': 'email'}))
-    collaborator2 = forms.CharField(max_length=100, required=False, label='', widget=forms.TextInput(attrs={'placeholder': 'email'}))
-    collaborator3 = forms.CharField(max_length=100, required=False, label='', widget=forms.TextInput(attrs={'placeholder': 'email'}))
+    title = forms.CharField(max_length=500, label='task info', widget=forms.TextInput(attrs={'placeholder': 'task title', 'onfocus': "this.placeholder = ''", 'onblur': "this.placeholder = 'task title'"}))
+    description = forms.CharField(max_length=5000, label='', widget=forms.TextInput(attrs={'placeholder': 'description', 'onfocus': "this.placeholder = ''", 'onblur': "this.placeholder = 'description'"}))
+    collaborator1 = forms.CharField(max_length=100, required=False, label='collaborators', widget=forms.TextInput(attrs={'placeholder': 'email', 'onfocus': "this.placeholder = ''", 'onblur': "this.placeholder = 'email'"}))
+    collaborator2 = forms.CharField(max_length=100, required=False, label='', widget=forms.TextInput(attrs={'placeholder': 'email', 'onfocus': "this.placeholder = ''", 'onblur': "this.placeholder = 'email'"}))
+    collaborator3 = forms.CharField(max_length=100, required=False, label='', widget=forms.TextInput(attrs={'placeholder': 'email', 'onfocus': "this.placeholder = ''", 'onblur': "this.placeholder = 'email'"}))
+
+# class newTaskForm(forms.Form):
+#     taskTitle = forms.CharField(max_length=500, label='Task Info', widget=forms.TextInput(attrs={'placeholder': 'Task Title'}))
+#     taskDescription = forms.CharField(max_length=5000, label='Task Description', widget=forms.TextInput(attrs={'placeholder': 'description'}))
+#     collaborator1 = forms.CharField(max_length=100, required=False, label='collaborators', widget=forms.TextInput(attrs={'placeholder': 'email'}))
+#     collaborator2 = forms.CharField(max_length=100, required=False, label='collaborators', widget=forms.TextInput(attrs={'placeholder': 'email'}))
+#     collaborator3 = forms.CharField(max_length=100, required=False, label='collaborators', widget=forms.TextInput(attrs={'placeholder': 'email'}))

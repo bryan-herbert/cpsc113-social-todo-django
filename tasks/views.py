@@ -1,40 +1,46 @@
 from django.shortcuts import render
-from django.http import HttpResponse
-
+from django.http import HttpResponseRedirect
+from splash.forms import newTaskForm
+import pdb
+from tasks.models import Task
+from django.contrib.auth.models import User
 # Create your views here.
+
 
 def index(request):
     return HttpResponse("What's up Doc? You're at the Tasks Index")
     
-def createTask (request):
+def create(request):
     if request.method == 'POST':
-        form = NewTaskForm(request.POST)
+        form = newTaskForm(request.POST)
+        print "GOT HERE1"
         if form.is_valid():
+            print "GOT HERE2"
             cleanData = form.cleaned_data
-            task = Task(owner=request.user, title=cleanData['title'], description=cleanData['description'])
+            task = Task(owner=request.user, title=request.POST.get('title'), description=request.POST.get('description'))
             task.save()
-            task.collaborators.add(cleanData['collaborator1'])
-            task.collaborators.add(cleanData['collaborator2'])
-            task.collaborators.add(cleanData['collaborator3'])
+            if User.objects.filter(username=cleanData['collaborator1']).exists():
+                task.collaborators.add(User.objects.get(username=cleanData['collaborator1']))
+            if User.objects.filter(username=cleanData['collaborator2']).exists():
+                task.collaborators.add(User.objects.get(username=cleanData['collaborator2']))
+            if User.objects.filter(username=cleanData['collaborator3']).exists():
+                task.collaborators.add(User.objects.get(username=cleanData['collaborator3'])) 
             task.save()
-    
+            print "GOT HERE3"
     return HttpResponseRedirect('/')
 
-def deleteTask (request):
+def delete (request, task_id):
     if request.method == 'POST':
         task = Task.objects.get(id=task_id)
         task.delete()
-
     return HttpResponseRedirect('/')
     
-def toggleTask(request, task_id):
+def toggle(request, task_id):
     if request.method == 'POST':
         task = Task.objects.get(id=task_id)
         if task.isComplete == True:
             task.isComplete = False
         else:
             task.isComplete = True
-
         task.save()
-
     return HttpResponseRedirect('/')
