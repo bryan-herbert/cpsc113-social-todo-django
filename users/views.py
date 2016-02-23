@@ -17,10 +17,22 @@ def registration(request):
                 registrationForm = RegisterForm()
                 loginForm = LoginForm()
                 return render(request, 'index.html', {'login': loginForm, 'registration': registrationForm, 'errors': 'Name is too long'})
+            if len(cleanData['name']) < 1:
+                registrationForm = RegisterForm()
+                loginForm = LoginForm()
+                return render(request, 'index.html', {'login': loginForm, 'registration': registrationForm, 'errors': 'Name is too short'})
             if len(cleanData['password']) > 50:
                 registrationForm = RegisterForm()
                 loginForm = LoginForm()
                 return render(request, 'index.html', {'login': loginForm, 'registration': registrationForm, 'errors': 'Password is too long'})
+            if len(cleanData['password']) < 1:
+                registrationForm = RegisterForm()
+                loginForm = LoginForm()
+                return render(request, 'index.html', {'login': loginForm, 'registration': registrationForm, 'errors': 'Password is too short'})
+            if len(cleanData['passwordConfirmation']) < 1:
+                registrationForm = RegisterForm()
+                loginForm = LoginForm()
+                return render(request, 'index.html', {'login': loginForm, 'registration': registrationForm, 'errors': 'Password Confirmation is too short'})
             if cleanData['password'] == cleanData['passwordConfirmation']:
                 if User.objects.filter(username=cleanData['email']).exists():
                     registrationForm = RegisterForm()
@@ -38,7 +50,8 @@ def registration(request):
         else:
             registrationForm = RegisterForm()
             loginForm = LoginForm()
-            return render(request, 'index.html', {'login': loginForm, 'registration': registrationForm, 'errors': 'Name too short'})
+            return render(request, 'index.html', {'login': loginForm, 'registration': registrationForm, 'errors': 'Name is too short'})
+
     return HttpResponseRedirect('/')
     
 def login(request):
@@ -48,12 +61,17 @@ def login(request):
     if User.objects.filter(username=email).exists():
         user = authenticate(username=email, password=password)
         if user is not None:
-            if user.is_active:
-                auth_login(request, user)
-                return HttpResponseRedirect('/')
+            if len(email) > 50:
+                return HttpResponseRedirect("Email is too long")
             else:
-                return HttpResponseRedirect('Error signing in')
-            
+                if len(email) > 50:
+                    return HttpResponseRedirect("Email is too long")
+                else:
+                    if user.is_active:
+                        auth_login(request, user)
+                        return HttpResponseRedirect('/')
+                    else:
+                        return HttpResponseRedirect('Error signing in')
         else:
             registrationForm = RegisterForm()
             loginForm = LoginForm()
